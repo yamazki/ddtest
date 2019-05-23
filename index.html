@@ -40,6 +40,11 @@ canvas.addEventListener('dragover', dragover, false);
   display: inline-block;
   position: absolute;
 }  
+@media print{
+  #wrapper {
+    display: none;
+  }  
+}  
 
 #canvas {  
   width: 100%;  
