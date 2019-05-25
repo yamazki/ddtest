@@ -3,14 +3,14 @@
 </head>
 <body >
   <div id="canvas" draggable="false" >
-    <span id=wrapper draggable="true" > web </span>
+    <span id=wrapper draggable="true" >web</span>
   </div>
 </body>
 <script>
 
-let draggedElement;
 let x;
 let y;
+
 const dragstart = function(e) {
   draggedElement = this;
   e.dataTransfer.dropEffect = 'move';
@@ -23,18 +23,43 @@ const drag = function(e) {
 }
 
 const drop = function(e) {
-  draggedElement.style.left = e.x  - x + "px";
-  draggedElement.style.top = e.y - y + "px";
+  draggedElement.style.left = e.x  - x + 'px';
+  draggedElement.style.top = e.y - y + 'px';
 }
 
 const dragover = function(e) {
   e.preventDefault();
 }
 
+const dblclick = function(e) {
+  const text = this.innerText;
+  this.innerHTML = `<input type='text' value=${text} id='form' name='form' style='width:100px; height:30px;'>`
+  const input = this.firstElementChild;
+  
+  // inputフィールドのカーソルを末尾に合わせる
+  input.focus();
+  const tmp = input.value;
+  input.value = "";
+  input.value = tmp;
+ 
+  this.addEventListener('keypress', pressEnter, false);
+  this.removeEventListener('dblclick', dblclick, false);
+  console.log(this);
+}
+
+const pressEnter = function(e) {
+  const text = document.getElementById('form').value;
+  if ( e.keyCode == 13) { //EnterKey input
+    this.innerText = text;
+    this.addEventListener('dblclick', dblclick, false);
+  }
+}
+
 const text = document.getElementById("wrapper");
 const canvas = document.getElementById("canvas");
 text.addEventListener('dragstart', dragstart, false);
 text.addEventListener('drag', drag, false);
+text.addEventListener('dblclick', dblclick, false);
 canvas.addEventListener('drop', drop, false);
 canvas.addEventListener('dragover', dragover, false);
 </script>
