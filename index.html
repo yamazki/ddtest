@@ -2,32 +2,39 @@
 <head>
 </head>
 <body >
-  <div id="canvas" draggable="false" ondragover="return false">
+  <div id="canvas" draggable="false" >
     <span id=wrapper draggable="true" > web </span>
   </div>
 </body>
 <script>
 
 let draggedElement;
+let x;
+let y;
 const dragstart = function(e) {
   draggedElement = this;
-  e.dataTransfer.dropEffect = 'copy';
+  e.dataTransfer.dropEffect = 'move';
+  x = e.x - this.offsetLeft;
+  y = e.y - this.offsetTop;
   e.dataTransfer.setData('text/html', this.innerHTML);
 }
 
+const drag = function(e) {
+}
 
 const drop = function(e) {
-  draggedElement.style.left = e.x;
-  draggedElement.style.top = e.y;
-  console.log(draggedElement)
+  draggedElement.style.left = e.x  - x + "px";
+  draggedElement.style.top = e.y - y + "px";
 }
 
 const dragover = function(e) {
+  e.preventDefault();
 }
 
 const text = document.getElementById("wrapper");
 const canvas = document.getElementById("canvas");
 text.addEventListener('dragstart', dragstart, false);
+text.addEventListener('drag', drag, false);
 canvas.addEventListener('drop', drop, false);
 canvas.addEventListener('dragover', dragover, false);
 </script>
@@ -35,11 +42,15 @@ canvas.addEventListener('dragover', dragover, false);
 
 <style>
 #wrapper {  
-  width: 100%;  
-  height: 100%;
+  text-align: center;
+  cursor: move;
+  width: 100px;  
+  height: 30px;
   display: inline-block;
   position: absolute;
+  background-color: yellow;
 }  
+
 @media print{
   #wrapper {
     display: none;
